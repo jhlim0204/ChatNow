@@ -1,38 +1,162 @@
+body {
+  background-color: #F0F2F5;
+}
+
 .App {
-  text-align: center;
+  padding-top: 90px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.chatBox {
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.list-group {
+  max-height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.list-group::-webkit-scrollbar {
+  width: 9px;
 }
 
-.App-link {
-  color: #61dafb;
+.list-group::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+.list-group:hover::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 8px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.list-group:hover::-webkit-scrollbar-thumb:hover {
+  background: #cdcdcd;
+}
+
+.user {
+  background-color: #F0F2F5;
+  text-overflow: ellipsis; 
+}
+
+.userText {
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.messageBox {
+  min-height: 500px;
+  height: 75vh;
+  background-color: white;
+}
+
+.messageBox::-webkit-scrollbar {
+  width: 9px;
+}
+
+.messageBox::-webkit-scrollbar-track {
+  background: transparent; 
+}
+ 
+.messageBox::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 8px;
+}
+
+.messageBox::-webkit-scrollbar-thumb:hover {
+  background: #cdcdcd;
+}
+
+.message {
+  margin-top: 12px;
+  margin-bottom: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  width: fit-content;
+  min-width: 15%;
+  max-width: 100%;
+  background-color: #e9ecef;
+  border: 0;
+}
+
+.message.self-message {
+  background-color: #dfe9fc;
+  margin-left: auto;
+}
+
+.message .card-body {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.list-group-item.user {
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.tab-pane.active { 
+  animation-name: fadeIn; 
+  animation-duration: 350ms; 
+  animation-timing-function: linear; 
+}
+
+@keyframes fadeIn { 0% { opacity: 0; } 40% {opacity: 0;} 100% { opacity: 1; } }
+
+.line {
+  background-color: #CFD8DC;
+  height: 1px;
+  width: 100%;
+}
+
+.tabs {
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.nav-tabs .nav-link {
+  color: black;
+  border: none;
+}
+
+.nav-tabs .nav-link:hover, .nav-tabs .nav-link.active {
+  border-bottom: 1.5px solid #2196F3;
+}
+
+.image-container {
+  margin-top: -35px;
+  position: relative;
+  width: 100%;
+  max-width:100%;
+}
+
+.centered {
+  position: absolute; 
+  bottom: 0; 
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1; 
+  max-width: 100%; 
+  width: 100%;
+  padding: 20px; 
+}
+
+.navbar-dark{
+  background-color: #7f838d;
+}
+
+.form-control-with-spinner {
+  position: relative;
+}
+
+.form-control-with-spinner .form-control {
+  padding-right: 2rem;
+}
+
+.form-control-with-spinner .spinner-border{
+  position: absolute;
+  top: .65rem;
+  right: .63rem;
 }
