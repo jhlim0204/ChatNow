@@ -64,7 +64,7 @@ class Chat extends Component {
                                     <span><i className="bi bi-chat"> </i>Room: <br/></span>
                                     <span className="h1 pt-1 pb-1 mt-2 text-center w-100 d-block rounded" style={{fontSize: 19+'px', backgroundColor: '#E3E4E6'}}>{this.props.curRoom}</span>
                                     <br/>
-                                    <span><i className="bi bi-people"> </i>Users <br/></span>
+                                    <span><i className="bi bi-people"> </i>Users ({curRoomUserList.length})<br/></span>
                                     <ListGroup className="userList overflow-auto mt-1" style={{maxHeight: 378+'px'}}>{curRoomUserList}</ListGroup>
                                 </Col>
                                 <Col xs={12} className='mt-auto mb-3 text-center'>
