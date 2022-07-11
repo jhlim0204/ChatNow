@@ -144,7 +144,7 @@ class Login extends Component {
                             </Row>
                         </TabPane>
                         <TabPane tabId="register">
-                            <Register toggleModal={this.toggleModal} />
+                            <Register toggleModal={this.toggleModal} switchTab={() => { this.toggleTab('login'); }}/>
                         </TabPane>
                     </TabContent>
                 </ModalBody>

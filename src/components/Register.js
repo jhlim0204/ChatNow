@@ -60,7 +60,7 @@ class Register extends Component {
                         errMessPass: '',
                         isLoading: false
                     });
-                    this.props.toggleModal();
+                    this.props.switchTab();
                 } else {
                     alert("An error has occured. Please try again.")
                 }
