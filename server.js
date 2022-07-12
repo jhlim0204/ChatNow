@@ -4,14 +4,35 @@ const bodyParser = require('body-parser');
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require('cors');
+const session = require('express-session');
+const { mongoose } = require("mongoose");
+const MongoStore = require('connect-mongo');
 const crypto = require('crypto');
 
 const app = express();
 const httpServer = createServer(app);
+
+const uri = "mongodb+srv://pub:2VCFbXX0Ift1Qpp7@chatnow.6oilf.mongodb.net/chatnow?retryWrites=true&w=majority";
+const clientP = mongoose.connect(uri).then(m => m.connection.getClient());
+
+const sessionMiddleware = session({
+    secret: 'chatnow 123',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {maxAge: 7*24*60*60*1000},
+    store: MongoStore.create( {
+        clientPromise: clientP,
+        stringify: false,
+        autoRemove: 'interval',
+        autoRemoveInterval: 1
+    }  )
+  });
+
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('./build'));
+app.use(sessionMiddleware);
 
+app.use(express.static('./build'));
 app.use('/', (req, res, next) => {
     if (req.method !== 'GET' ){
         return next();
@@ -19,12 +40,6 @@ app.use('/', (req, res, next) => {
         res.sendFile(path.join(__dirname+'/build/index.html'));
     }
 });
-
-//app.use(express.static(__dirname + '/build/index.html'));
-
-const { mongoose } = require("mongoose");
-const uri = "mongodb+srv://pub:2VCFbXX0Ift1Qpp7@chatnow.6oilf.mongodb.net/chatnow?retryWrites=true&w=majority";
-mongoose.connect(uri);
 
 const userSchema = mongoose.Schema({
     username: String,
@@ -73,6 +88,7 @@ app.post('/loginuser', (req, res) => {
             result.username = true;
             if (response.password === crypto.createHash('sha256').update(req.body.password).digest('hex')){
                 result.password = true;
+                req.session.username = username;
                 res.send(JSON.stringify(result));
             } else {
                 res.send(JSON.stringify(result));
@@ -82,6 +98,10 @@ app.post('/loginuser', (req, res) => {
 });
 
 const io = new Server(httpServer);
+
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
+io.use(wrap(sessionMiddleware));
 
 const bot_name = "ChatNow_Bot";
 
@@ -99,22 +119,34 @@ io.on("connection", (socket) => {
 
     //Handle Room Joining
     socket.on("joinRoom", (username, room)=>{
-        if (user.room){
-            socket.leave(user.room); //Quit previous room if available, sanity check
-        }
+        socket.request.session.reload( err => {
+            const session = socket.request.session;
+            if (!session.username){
+                socket.emit("revertUsername", null);
+                return;
+            }
 
-        user = {username:username, room:room};
-        socket.join(user.room);
+            if (user.room){
+                socket.leave(user.room); //Quit previous room if available, sanity check
+            }
+            if (username !== session.username){
+                socket.emit("revertUsername", session.username);
+                username = session.username;
+            }
 
-        if ((userList[user.room]).findIndex(users=>users===user.username) === -1){
-            socket.to(user.room).emit("message", messageFormat(`${user.username} has joined the room!`, bot_name));
-            socket.emit("welcomeMessage", messageFormat(`Welcome to ${user.room}, ${user.username}!`, bot_name));
-        }
-
-        userList[user.room] = userList[user.room].concat(username);
-
-        const uniqueList = (userList[user.room]).filter(onlyUnique);
-        io.to(user.room).emit("userListUpdate", uniqueList);
+            user = {username:username, room:room};
+            socket.join(user.room);
+    
+            if ((userList[user.room]).findIndex(users=>users===user.username) === -1){
+                socket.to(user.room).emit("message", messageFormat(`${user.username} has joined the room!`, bot_name));
+                socket.emit("welcomeMessage", messageFormat(`Welcome to ${user.room}, ${user.username}!`, bot_name));
+            }
+    
+            userList[user.room] = userList[user.room].concat(username);
+    
+            const uniqueList = (userList[user.room]).filter(onlyUnique);
+            io.to(user.room).emit("userListUpdate", uniqueList);
+        });
     });
 
     //Handle Message
@@ -162,6 +194,11 @@ io.on("connection", (socket) => {
             socket.to(user.room).emit("userListUpdate", uniqueList);
             user.room = ''; 
         }
+    })
+
+    socket.on("logOut", ()=>{
+        socket.request.session.username = undefined;
+        socket.request.session.save(err=>{});
     })
 
     socket.on("disconnect", (reason)=>{

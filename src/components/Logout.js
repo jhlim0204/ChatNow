@@ -16,7 +16,6 @@ class Logout extends Component {
     }
 
     logout = () => {
-        Cookies.remove('username');
         this.toggleModal();
         this.props.logOut();
     }

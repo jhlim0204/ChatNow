@@ -61,6 +61,8 @@ class Main extends Component {
     }
 
     logOut = () => {
+        Cookies.remove('username');
+        socket.emit("logOut");
         this.leaveRoom();
         this.updateStatus();
     }
@@ -69,6 +71,15 @@ class Main extends Component {
         if (!Cookies.get("username") && Cookies.get("room")){
             Cookies.remove("room");
         }
+
+        socket.on("revertUsername", (username)=>{
+            if (username){
+                Cookies.set("username", username);
+                this.updateStatus();
+            } else {
+                this.logOut();
+            }
+        });
 
         socket.on("userListUpdate", (userList)=>{
             this.setState({curRoomUserList: userList})
