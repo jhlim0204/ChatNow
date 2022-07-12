@@ -151,7 +151,7 @@ class Register extends Component {
                                 <div className="form-control-with-spinner">
                                     <Input type="text" name="username" value={this.state.username} onChange={this.handleInput} onBlur={this.checkUsername} 
                                         invalid={this.state.invalidUsername} valid={this.state.validUsername} autoComplete="off" spellCheck="false"/>
-                                    <div className={this.state.checkingUsername?"d-inline":"d-none"}><div class="spinner-border spinner-border-sm text-secondary" role="status"></div></div>
+                                    <div className={this.state.checkingUsername?"d-inline":"d-none"}><div className="spinner-border spinner-border-sm text-secondary" role="status"></div></div>
                                     <FormFeedback>
                                         {this.state.errMessUser}
                                     </FormFeedback>
@@ -180,7 +180,7 @@ class Register extends Component {
                             <div className="col">
                             <FormGroup className="mt-2 float-end">
                                 <Button className="me-2" type="submit" color="primary" disabled={this.state.isLoading}>
-                                    <div className={this.state.isLoading?"d-inline":"d-none"}><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div> Register
+                                    <div className={this.state.isLoading?"d-inline":"d-none"}><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div> Register
                                 </Button>
                                 <Button onClick={this.props.toggleModal}>Cancel</Button>
                             </FormGroup>

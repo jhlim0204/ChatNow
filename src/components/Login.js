@@ -135,7 +135,7 @@ class Login extends Component {
                                         </FormGroup>
                                         <FormGroup className="float-end mt-2">
                                             <Button className="me-2" form="loginForm" type="submit" color="primary" disabled={this.state.isLoading}>
-                                                <div className={this.state.isLoading?"d-inline":"d-none"}><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div> Login
+                                                <div className={this.state.isLoading?"d-inline":"d-none"}><span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></div> Login
                                             </Button>
                                             <Button onClick={this.toggleModal}>Cancel</Button>
                                         </FormGroup>
