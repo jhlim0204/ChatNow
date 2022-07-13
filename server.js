@@ -30,9 +30,9 @@ const sessionMiddleware = session({
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(sessionMiddleware);
-
 app.use(express.static('./build'));
+app.use(sessionMiddleware); //Order matters
+
 app.use('/', (req, res, next) => {
     if (req.method !== 'GET' ){
         return next();
