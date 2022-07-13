@@ -29,17 +29,30 @@ class Main extends Component {
     }
 
     joinRoom = () => {
+        const roomList = [
+            "Felwood",
+            "Lordaeron",
+            "Kalimdor",
+            "Dalaran",
+            "Ashenvale"
+        ];
+        let room = '';
         const username = this.state.username;
-        const room = Cookies.get("room");
+        if (roomList.includes(Cookies.get("room"))){
+            room = Cookies.get("room");
+        } else {
+            room = "Felwood";
+            Cookies.set("room", "Felwood");
+        }
 
-        if (this.state.curRoom === Cookies.get("room")){
+        if (this.state.curRoom === room){
             socket.emit("joinRoom", username, room);
         } else if (this.state.curRoom !== ''){
-            socket.emit("switchRoom", Cookies.get("room"));
-            this.setState({messages: [], curRoomUserList: [], curRoom: Cookies.get('room')});
+            socket.emit("switchRoom", room);
+            this.setState({messages: [], curRoomUserList: [], curRoom: room});
             socket.emit("joinRoom", username, room);
         } else {
-            this.setState({messages: [], curRoomUserList: [], curRoom: Cookies.get('room')});
+            this.setState({messages: [], curRoomUserList: [], curRoom: room});
             socket.emit("joinRoom", username, room);
         }
 
