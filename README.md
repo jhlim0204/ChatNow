@@ -1,6 +1,6 @@
 # ChatNow
 
-Realtime chat application using React, Reactstrap, Node.js, Express, Socket.io and MongoDB.
+A simple realtime chat application implemented using React, Reactstrap, Node.js, Express, Socket.io and MongoDB.
 
 ## Installation
 
